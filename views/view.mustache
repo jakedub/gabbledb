@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>View All Gabbles</title>
+  </head>
+  <body>
+    <nav>
+      <a href='/home'>Gabble</a>
+      <a href='/create'>Create New Gabble</a>
+      <a href='/login'>Log In As {{username}}</a>
+      <a href='/logout'>Log Out</a>
+    </nav>
+    <ul>
+      {{#data}}
+      <li>
+        {{userame}}
+        {{body}}
+        {{date}}
+        {{total_likes}}
+        <button type="submit">Like</button>
+        <button type="submit">Delete</button>
+      </li>
+      {{/data}}
+    </ul>
+  </body>
+</html>

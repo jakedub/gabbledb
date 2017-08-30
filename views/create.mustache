@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Create Gabble</title>
+  </head>
+  <body>
+    <nav>
+      <a href='/home'>Gabble</a>
+      <a href='/create'>Create New Gabble</a>
+      <a href='/login'>Log In As {{username}}</a>
+      <a href='/logout'>Log Out</a>
+    </nav>
+    <header><h1>Create a new gab</h1></header>
+    <form action="/create/home" method="post">
+      <textarea name="body" cols="30" rows="10" placeholder="Enter Your Gab" maxlength="140"></textarea><br />
+      <button type="submit">Save Gab</button>
+    </form>
+  </body>
+</html>

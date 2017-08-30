@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "jacob",
+    "password": null,
+    "database": "gabble",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "jacob",
+    "password": null,
+    "database": "gabble",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "jacob",
+    "password": null,
+    "database": "gabble",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Register for Gabble</title>
+  </head>
+  <body>
+    <nav>
+      <a href='/home'>Gabble</a>
+      <a href='/create'>Create New Gabble</a>
+      <a href='/login'>Log In As {{username}}</a>
+      <a href='/logout'>Log Out</a>
+    </nav>
+    <form action="/register" method="post">
+      <label for="username">Username</label>
+      <input type="text" name="username" value="username">
+      <label for="password">Password</label>
+      <input type="password" name="password" value="password">
+      <label for="confirm">Confirm Password</label>
+      <input type="password" name="confirm" value="confirm">
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>
