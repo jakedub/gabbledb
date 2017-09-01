@@ -8,7 +8,9 @@
   <body>
     <form action="/home/list" method="post">
       <header><h1>Liked by</h1></header>
+      {{#data}}
       <ul>{{username}}</ul>
+      {{/data}}
     </form>
   </body>
 </html>

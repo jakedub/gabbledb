@@ -21,15 +21,18 @@
       <li>
         <div class="messages">
         <span><h3>{{username}}</h3></span>
-        {{body}}
+        <a href="/view/{{id}}">{{body}}</a> - <span>{{likes}} likes</span>
         {{date}}
-        {{total_likes}}
+        <a href="/list/{{id}}">{{total_likes}}</a> - <span>{{total_likes}} total likes</span>
         </div>
         <form class="delete" method="post" action="/edit/{{id}}">
           <button type="submit">Edit</button>
         </form>
         <form class="delete" method="post" action="/delete/{{id}}/delete">
           <button type="submit">Delete</button>
+        </form>
+        <form class="like" method="post" action="/like/{{id}}">
+          <button type="submit">Like</button>
         </form>
       </li>
       {{/data}}

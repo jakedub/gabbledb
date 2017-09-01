@@ -55,7 +55,7 @@ router.get("/register", function(req,res){
   res.render("register");
 })
 
-//Register Pull Username/Password. Put into Session. Bcrypt needed? Does not route. 
+//Register Pull Username/Password. Put into Session. Bcrypt needed? Does not route.
 router.post('/register', function(req,res){
   let newUser = {
     newUser.username = req.session.username
@@ -70,6 +70,13 @@ router.post('/register', function(req,res){
 });
 
 
+//Logging out and redirect to Login Page
+router.get("/logout", function(req,res) {
+  req.session.destroy();
+  res.redirect("/login");
+})
+
+//Create Gab
 //Create an action
 router.post('/create', function(req,res){
   const newMessage = {
@@ -93,20 +100,35 @@ router.get('/create', function(req,res){
 });
 
 
-//Logging out and redirect to Login Page
-router.get("/logout", function(req,res) {
-  req.session.destroy();
-  res.redirect("/login");
+//Edit Gab...doesn't work
+router.post("/view/:id/edit", function(req,res){
+  console.log("Do you see me?");
+  let input = req.body.body;
+  models.Messages.findById(req.body.id).then(function(edit){
+    req.edit.update(input).then(function(){
+      res.redirect('/todo');
+    })
+  })
 })
 
-//Create Gab
+//Like A Gab
+router.get("/view/:messageId",function (req, res) {
+    req.body.likes += 1;
+    req.body.save().then(function () {
+        res.redirect('/view');
+    });
+});
 
-//Edit Gab
+//Displaying the likes
+router.post('/list/:messageId', function (req,res){
+  res.render('/list', {data, data})
+  })
+})
 
-//Delete Gab
+//Delete Gab. TODO: Doesn't appear to work
 router.post("/home/:id/delete", function (req, res) {
   models.Messages.findById(req.params.id).then(function(message){
-    todo.destroy().then(function () {
+    message.destroy().then(function () {
         res.redirect("/");
       })
     });
