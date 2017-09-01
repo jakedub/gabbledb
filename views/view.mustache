@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>View All Gabbles</title>
+    <link rel="stylesheet" type="text/css" href="./css/style.css" />
   </head>
   <body>
     <nav>
@@ -11,17 +12,28 @@
       <a href='/login'>Log In As {{username}}</a>
       <a href='/logout'>Log Out</a>
     </nav>
+    <form method="post" action="/">
+      <header>
+        <h1>Below You Should See: Gabs (Messages!), Likes (By Other People)</h1>
+      </header>
     <ul>
       {{#data}}
       <li>
-        {{userame}}
+        <div class="messages">
+        <span><h3>{{username}}</h3></span>
         {{body}}
         {{date}}
         {{total_likes}}
-        <button type="submit">Like</button>
-        <button type="submit">Delete</button>
+        </div>
+        <form class="delete" method="post" action="/edit/{{id}}">
+          <button type="submit">Edit</button>
+        </form>
+        <form class="delete" method="post" action="/delete/{{id}}/delete">
+          <button type="submit">Delete</button>
+        </form>
       </li>
       {{/data}}
     </ul>
+    </form>
   </body>
 </html>

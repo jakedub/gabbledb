@@ -1,0 +1,13 @@
+nav{
+  text-decoration: none;
+  padding-bottom: 10px;
+}
+
+nav a{
+  text-decoration: none;
+  box-sizing: border-box;
+  background-color: blue;
+  color: white;
+  padding-left: 2px;
+  padding-right: 2px;
+}

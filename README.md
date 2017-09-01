@@ -27,10 +27,9 @@ See who liked a message NOTE Form is done
 
 Needs Completed:
 1. Password encryption
-2. Message connections
-3. Code review for Username/Password, login, view all messages, create new user, create new gab
-4. Log out!
-5. View all messages sort by newest
-6. Delete code needs written
-7. Like a message needs code written
-8. See who liked code needs written
+2. Code review for Username/Password, login, view all messages, create new user, create new gab
+3. Log out!
+4. View all messages sort by newest
+5. Delete code needs written
+6. Like a message needs code written
+7. See who liked code needs written

@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Register for Gabble</title>
+    <link rel="stylesheet" type="text/css" href="./css/style.css" />
   </head>
   <body>
     <nav>
@@ -13,11 +14,11 @@
     </nav>
     <form action="/register" method="post">
       <label for="username">Username</label>
-      <input type="text" name="username" value="username">
+      <input type="text" name="username" value={{username}}>
       <label for="password">Password</label>
-      <input type="password" name="password" value="password">
+      <input type="password" name="password" value={{password}}>
       <label for="confirm">Confirm Password</label>
-      <input type="password" name="confirm" value="confirm">
+      <input type="password" name="confirm" value={{confirm}}>
       <button type="submit">Submit</button>
     </form>
   </body>
