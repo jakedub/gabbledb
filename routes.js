@@ -10,10 +10,8 @@ router.get('/', function (req,res){
 // Index all messages
 router.get("/view", function (req, res) {
     models.Messages.findAll().then(function (message) {
-        res.render("view", {
-            message: message
-        });
-    });
+        res.render("view", {message: message});
+    })
 });
 
 //login. Uses session to store. Has no users at the moment so won't work. Not using bcrypt here. TODO: Update for bcrypt
@@ -21,54 +19,42 @@ router.get('/login', function(req, res){
   res.render('login');
 })
 //Loggin Into System. Needs to check against db. TODO: Doesn't work
-router.get('/', function(req, res){
-  let newUser = {};
-  newUser.username = req.session.username
-  newUser.password = req.session.password
-  if (typeof req.session.username !== 'undefined'){
-    res.render('index', newUser);
-  }
-  else{
-    console.log('redirected to login!');
-    res.redirect('/login');
-  }
-});
-
-//Logging in and going to home. TODO: Doesn't work
-router.post('/login/home', function(req, res){
-  let name = req.body.username;
-  let password = req.body.password;
-  console.log(req.body);
-  if (users[name] === password){
-    req.session.username = name
-    req.session.password = password
-    res.redirect('/');
-  }
-  else{
-    res.redirect('/login');
-    console.log('nope');
-  }
-});
+router.post('/login', function(req, res){
+  let currentUser = {};
+  req.body.username = req.session.username
+  req.body.password = req.session.password
+  models.Users.find(newUser).then(function(userCheck){
+    if (currentUser){
+      res.redirect('/view')
+    }
+  });
 
 //Register Render Page
 router.get("/register", function(req,res){
   res.render("register");
 })
 
-//Register Pull Username/Password. Put into Session. Bcrypt needed? Does not route.
-router.post('/register', function(req,res){
+//Register Pull Username/Password. Think I did this correctly. Doesn't really work. The Where would also need an error of not unique.
+router.post('register', function(req,res){
   let newUser = {
-    newUser.username = req.session.username
-    newUser.password = req.session.password
-    newUser.confirm = req.session.confirm
-  }
-  models.Users.findById().then(function(newPerson){
-    newPerson.create(newUser).then(function(){
-      res.redirect('/login')
-    })
+    username: req.body.username,
+    passwordHash: bcrypt.hashSync(req.body.password, 8)
+  };
+  models.Users.findOrCreate({
+    where: {
+      username: req.body.username
+    },
+    defaults: {
+      username: req.body.username,
+      passwordHash: bcrypt.hashSync(req.body.password, 8);
+    }
+  }).spread((user, created), function{
+    console.log(user.get({
+      plain:true;
+    }))
+    console.log(created);
   })
-});
-
+})
 
 //Logging out and redirect to Login Page
 router.get("/logout", function(req,res) {
@@ -119,7 +105,7 @@ router.get("/view/:messageId",function (req, res) {
     });
 });
 
-//Displaying the likes
+//Displaying the likes. Don't know if works based on everything else being broken. Needs to display the username of liked
 router.post('/list/:messageId', function (req,res){
   res.render('/list', {data, data})
   })
