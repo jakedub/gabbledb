@@ -10,7 +10,7 @@ router.get('/', function (req,res){
 // Index all messages
 router.get("/view", function (req, res) {
     models.Messages.findAll().then(function (message) {
-        res.render("view", {message: message});
+        res.render("view", {data: data});
     })
 });
 
@@ -35,26 +35,36 @@ router.get("/register", function(req,res){
 })
 
 //Register Pull Username/Password. Think I did this correctly. Doesn't really work. The Where would also need an error of not unique.
+// router.post('register', function(req,res){
+//   let newUser = {
+//     username: req.body.username,
+//     passwordHash: bcrypt.hashSync(req.body.password, 8)
+//   };
+//   models.Users.findOrCreate({
+//     where: {
+//       username: req.body.username
+//     },
+//     defaults: {
+//       username: req.body.username,
+//       passwordHash: bcrypt.hashSync(req.body.password, 8);
+//     }
+//   }).spread((user, created), function{
+//     console.log(user.get({
+//       plain:true;
+//     }))
+//     console.log(created);
+//   })
+// })
+//Register but only create. Should be storing the password in bcrypt.
 router.post('register', function(req,res){
   let newUser = {
     username: req.body.username,
-    passwordHash: bcrypt.hashSync(req.body.password, 8)
+    passwordHash: bcrypt.hashSynce(req.body.password, 8)
   };
-  models.Users.findOrCreate({
-    where: {
-      username: req.body.username
-    },
-    defaults: {
-      username: req.body.username,
-      passwordHash: bcrypt.hashSync(req.body.password, 8);
-    }
-  }).spread((user, created), function{
-    console.log(user.get({
-      plain:true;
-    }))
-    console.log(created);
+  models.Users.create(newUser).then(function(){
+    res.redirect('login');
   })
-})
+});
 
 //Logging out and redirect to Login Page
 router.get("/logout", function(req,res) {
@@ -96,6 +106,7 @@ router.post("/view/:id/edit", function(req,res){
     })
   })
 })
+
 
 //Like A Gab
 router.get("/view/:messageId",function (req, res) {
