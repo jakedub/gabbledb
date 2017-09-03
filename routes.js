@@ -25,7 +25,7 @@ router.get('/login', function(req, res){
 router.post('/login', function(req, res){
   let username = req.body.username;
   let password = req.body.password;
-  if (models.User.findOne({username:username} === username) && {password:password} === password){
+  if (models.User.findById(id){
     req.session.username = name
     req.session.password = password
     res.redirect('/view');
