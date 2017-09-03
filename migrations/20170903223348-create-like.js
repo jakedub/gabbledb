@@ -8,8 +8,8 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      display: {
-        type: Sequelize.STRING
+      like: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,

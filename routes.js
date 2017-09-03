@@ -18,51 +18,43 @@ const models = require("./models");
 
 // //Loggin Into System. Needs to check against db. Then store in session. TODO: Doesn't work
 
-router.get('/login', function(req, res){
-  res.render('login');
+router.get('/login', function(req,res){
+  if (req.session && req.session.authenticated){
+    let user = models.User.findOne({
+      where: {req.session.username,
+      password: req.session.password
+    }
+    . then(function(user){
+      if (user){
+        req.session.username = req.body.username;
+        req.session.userId = user.dataValues.id;
+        let username = req.session.username;
+        let userid = req.session.userId;
+        res.render('view', {data:data});
+      } else {
+        res.redirect('/login')
+      }
+    })
+  }
 })
 
 router.post('/login', function(req, res){
   let username = req.body.username;
   let password = req.body.password;
-  if (models.User.findById(id){
-    req.session.username = name
-    req.session.password = password
-    res.redirect('/view');
-  } else {
-    res.redirect("/login");
-    console.log('incorrect');
-  }
+  models.User.findOne({
+    where: {
+      username: username;
+      password: password
+    }
+  })
 })
-
-
 
 
 //Register Render Page
 router.get("/register", function(req,res){
   res.render("register");
 })
-//Register Pull Username/Password. Think I did this correctly. Doesn't really work. The Where would also need an error of not unique.
-// router.post('register', function(req,res){
-//   let newUser = {
-//     username: req.body.username,
-//     passwordHash: bcrypt.hashSync(req.body.password, 8)
-//   };
-//   models.Users.findOrCreate({
-//     where: {
-//       username: req.body.username
-//     },
-//     defaults: {
-//       username: req.body.username,
-//       passwordHash: bcrypt.hashSync(req.body.password, 8);
-//     }
-//   }).spread((user, created), function{
-//     console.log(user.get({
-//       plain:true;
-//     }))
-//     console.log(created);
-//   })
-// })
+
 //Register but only create. Should be storing the password in bcrypt. Bcrypt not working. Redirects and appears to store. Does not confirm password.
 router.post('/register', function(req,res){
   let newUser = {
