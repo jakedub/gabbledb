@@ -12,6 +12,7 @@ const routes = require("./routes");
 const app = express();
 const bcrypt = require ("bcryptjs");
 const session = require ('express-session');
+// const hash = bcrypt.hashSync(password, 8);
 
 app.use("/css", express.static("./public"));
 
