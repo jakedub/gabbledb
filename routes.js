@@ -15,24 +15,28 @@ router.get("/home", function (req, res) {
 //login. Uses session to store. Has no users at the moment so won't work. Not using bcrypt here. TODO: Update for bcrypt
 
 // //Loggin Into System. Needs to check against db. Then store in session. TODO: Doesn't work
-router.get('/login', function(req,res){
-  let user = models.Users.findOne({
-    where: {
-      username: req.session.username,
-      password: req.session.password
-    }
-  }).then(function(user){
-    if (user){
-      req.session.username = req.body.username;
-      req.session.userId = user.datavalues.id;
-      let username = req.session.username;
-      let userid = req.session.userId;
-      res.render('view', {data: data})
-    } else {
-      res.redirect('/register')
-    }
-  })
+
+router.get('/login', function(req, res){
+  res.render('login')
 });
+// router.get('/login', function(req,res){
+//   let user = models.Users.findOne({
+//     where: {
+//       username: req.session.username,
+//       password: req.session.password
+//     }
+//   }).then(function(user){
+//     if (user){
+//       req.session.username = req.body.username;
+//       req.session.password = req.body.password;
+//       let username = req.session.username;
+//       let userid = req.session.userId;
+//       res.render('view', {data: data})
+//     } else {
+//       res.redirect('/register')
+//     }
+//   })
+// });
 
 router.post('/login', function(req, res){
   let username = req.body.username;
@@ -45,11 +49,11 @@ router.post('/login', function(req, res){
   }).then(function(user){
     if (user.password == password){
       req.session.password = password;
-      req.session.userId = user.dataValues.id;
+      req.session.userId = user.id;
       console.log(req.session);
-      res.redirect('/home');
+      res.redirect('/view');
     } else {
-      res.redirect('/home');
+      res.redirect('/register');
       console.log("Session login" + req.session);
     }
   })
@@ -69,6 +73,7 @@ router.post('/register', function(req,res){
   }
   models.User.create(newUser).then(function(user){
     req.username = user.username;
+    req.password = user.password;
     res.redirect('/login');
   })
 });
@@ -76,7 +81,7 @@ router.post('/register', function(req,res){
 //Logging out and redirect to Login Page
 router.get('/logout', function(req, res){
   req.session.destroy(function(err){})
-  res.render('view');
+  res.redirect('/login');
   console.log(req.session);
 });
 
@@ -101,13 +106,17 @@ router.get('/message', function(req, res){
   })
 });
 
-router.post('/home', function(req,res){
-  let message = models.Message.create({
-    title: req.body.title = req.session.message,
-    body: req.boby.body = req.session.message
-  })
-  res.redirect('/home')
+//home Page
+router.get('/view', function(req, res){
+  res.render('view', {data: data})
 });
+
+// router.post('/view', function(req,res){
+//   let message = models.Message.create({
+//     body: req.boby.body = req.session.message
+//   })
+//   res.redirect('/view')
+// });
 
 
 //Likes
