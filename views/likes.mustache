@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>List of Likes</title>
+    <link rel="stylesheet" type="text/css" href="./css/style.css" />
+  </head>
+  <body>
+    <nav>
+      <a href='/home'>Gabble</a>
+      <a href='/create'>Create New Gabble</a>
+      <a href='/login'>Log In As {{username}}</a>
+      <a href='/logout'>Log Out</a>
+    </nav>
+    <form action="/lists" method="post">
+      {{#data}}
+      <ul>
+        <li>
+          {{username}}
+        </li>
+      </ul>
+      {{/data}}
+    </form>
+  </body>
+</html>

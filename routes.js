@@ -2,49 +2,55 @@ const express = require('express');
 const router = express.Router();
 const models = require("./models");
 
-//Home Page
-// router.get('/', function (req,res){
-//   res.render('view');
-// })
-//
-// // Index all messages
-// router.get("/view", function (req, res) {
-//     models.Messages.findAll().then(function (message) {
-//         res.render("view", {data: data});
-//     })
-// });
+//Home Page. Need to add in name for the view mustache file
+router.get("/home", function (req, res) {
+    models.Message.findAll().then(function (message) {
+        res.render("view", {
+          data: data,
+          name: req.session.username
+        });
+    })
+});
 
 //login. Uses session to store. Has no users at the moment so won't work. Not using bcrypt here. TODO: Update for bcrypt
 
 // //Loggin Into System. Needs to check against db. Then store in session. TODO: Doesn't work
-
 router.get('/login', function(req,res){
-  if (req.session && req.session.authenticated){
-    let user = models.User.findOne({
-      where: {req.session.username,
+  let user = models.Users.findOne({
+    where: {
+      username: req.session.username,
       password: req.session.password
     }
-    . then(function(user){
-      if (user){
-        req.session.username = req.body.username;
-        req.session.userId = user.dataValues.id;
-        let username = req.session.username;
-        let userid = req.session.userId;
-        res.render('view', {data:data});
-      } else {
-        res.redirect('/login')
-      }
-    })
-  }
-})
+  }).then(function(user){
+    if (user){
+      req.session.username = req.body.username;
+      req.session.userId = user.datavalues.id;
+      let username = req.session.username;
+      let userid = req.session.userId;
+      res.render('view', {data: data})
+    } else {
+      res.redirect('/register')
+    }
+  })
+});
 
 router.post('/login', function(req, res){
   let username = req.body.username;
   let password = req.body.password;
   models.User.findOne({
     where: {
-      username: username;
+      username: username,
       password: password
+    }
+  }).then(function(user){
+    if (user.password == password){
+      req.session.password = password;
+      req.session.userId = user.dataValues.id;
+      console.log(req.session);
+      res.redirect('/home');
+    } else {
+      res.redirect('/home');
+      console.log("Session login" + req.session);
     }
   })
 })
@@ -60,45 +66,74 @@ router.post('/register', function(req,res){
   let newUser = {
     username: req.body.username,
     password: req.body.password
-    // passwordHash: bcrypt.hashSynce(req.body.password, 8)
   }
-  models.User.create(newUser).then(function(){
+  models.User.create(newUser).then(function(user){
+    req.username = user.username;
     res.redirect('/login');
   })
 });
 
 //Logging out and redirect to Login Page
-// router.get("/logout", function(req,res) {
-//   req.session.destroy();
-//   res.redirect("/login");
-// })
+router.get('/logout', function(req, res){
+  req.session.destroy(function(err){})
+  res.render('view');
+  console.log(req.session);
+});
 
-//Create Gab
-//Create an action
-// router.post('/create', function(req,res){
-//   const newMessage = {
-//     body: req.body.body
-//   }
-//   models.Messages.create(newMessage).then(function(message){
-//     res.redirect('/');
-//   })
-// })
+//Gab
+router.post('/message', function(req, res){
+  let newMessage = models.Message.build({
+    userId: req.body.userId,
+    title: req.body.title,
+    body: req.body.body
+  })
+  newMessage.save().then(function(message) {
+    console.log(message);
+  })
+});
 
-//Index action
-// router.post('/create', function(req,res) {
-//   res.render('create');
-// })
+router.get('/message', function(req, res){
+  models.Message.findAll().then(function(message){
+    res.render('view', {
+      message: message,
+      name: req.session.username
+    })
+  })
+});
 
-//Render to home?
-// router.get('/create', function(req,res){
-//   models.Messages.findAll().then(function(messages){
-//     res.render('view', {data: data})
-//   });
-// });
+router.post('/home', function(req,res){
+  let message = models.Message.create({
+    title: req.body.title = req.session.message,
+    body: req.boby.body = req.session.message
+  })
+  res.redirect('/home')
+});
+
+
+//Likes
+router.post('/like', function(req, res){
+  let like = models.like.create({
+    like: true,
+    userId: req.session.userId,
+    messageId: req.session.messageId
+  })
+});
+
+
+router.get('/likes', function(req, res){
+  models.Like.findall({
+    include: [{
+      model: models.User,
+      as: 'user'
+    }]
+  }).then(function(likes){
+    res.render('likes', {data:data})
+  });
+});
 
 
 //Edit Gab...doesn't work
-// router.post("/view/:id/edit", function(req,res){
+// router.post("/home/:id/edit", function(req,res){
 //   console.log("Do you see me?");
 //   let input = req.body.body;
 //   models.Messages.findById(req.body.id).then(function(edit){
@@ -110,26 +145,21 @@ router.post('/register', function(req,res){
 
 
 //Like A Gab
-// router.get("/view/:messageId",function (req, res) {
-//     req.body.likes += 1;
-//     req.body.save().then(function () {
-//         res.redirect('/view');
-//     });
-// });
+router.get("/home/:messageId",function (req, res) {
+    req.body.likes += 1;
+    req.body.save().then(function () {
+        res.redirect('/home');
+    });
+});
 
-//Displaying the likes. Don't know if works based on everything else being broken. Needs to display the username of liked
-// router.post('/list/:messageId', function (req,res){
-//   res.render('/list', {data, data})
-//   })
-// })
 
-//Delete Gab. TODO: Doesn't appear to work
-// router.post("/home/:id/delete", function (req, res) {
-//   models.Messages.findById(req.params.id).then(function(message){
-//     message.destroy().then(function () {
-//         res.redirect("/");
-//       })
-//     });
-// });
+//Delete Gab. Ideally works
+router.post("/home/:id/delete", function (req, res) {
+  models.Messages.findById(req.params.id).then(function(message){
+    message.destroy().then(function () {
+        res.redirect("/");
+      })
+    });
+});
 
 module.exports = router;
