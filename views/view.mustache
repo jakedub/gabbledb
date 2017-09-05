@@ -9,10 +9,10 @@
     <nav>
       <a href='/home'>Gabble</a>
       <a href='/create'>Create New Gabble</a>
-      <a href='/login'>Log In As {{username}}</a>
+      <a href='/login'>Logged In As {{#name}}{{.}}{{/name}}</a>
       <a href='/logout'>Log Out</a>
     </nav>
-    <form method="post" action="/view">
+    <form method="get" action="/view">
       <header>
         <h1>Below You Should See: Gabs (Messages!), Likes (By Other People)</h1>
       </header>

@@ -3,7 +3,7 @@ const router = express.Router();
 const models = require("./models");
 
 //Home Page. Need to add in name for the view mustache file
-router.get("/home", function (req, res) {
+router.get("/view", function (req, res) {
     models.Message.findAll().then(function (message) {
         res.render("view", {
           data: data,
@@ -12,31 +12,18 @@ router.get("/home", function (req, res) {
     })
 });
 
-//login. Uses session to store. Has no users at the moment so won't work. Not using bcrypt here. TODO: Update for bcrypt
+router.post('/view', function(req,res){
+  let message = models.Messages.create({
+    body: req.body.body = req.session.message
+  })
+  res.redirect('/view')
+});
 
-// //Loggin Into System. Needs to check against db. Then store in session. TODO: Doesn't work
+// //Loggin Into System. Needs to check against db. Then store in session. TODO: Works but doesn't hit view.
 
 router.get('/login', function(req, res){
   res.render('login')
 });
-// router.get('/login', function(req,res){
-//   let user = models.Users.findOne({
-//     where: {
-//       username: req.session.username,
-//       password: req.session.password
-//     }
-//   }).then(function(user){
-//     if (user){
-//       req.session.username = req.body.username;
-//       req.session.password = req.body.password;
-//       let username = req.session.username;
-//       let userid = req.session.userId;
-//       res.render('view', {data: data})
-//     } else {
-//       res.redirect('/register')
-//     }
-//   })
-// });
 
 router.post('/login', function(req, res){
   let username = req.body.username;
@@ -47,10 +34,9 @@ router.post('/login', function(req, res){
       password: password
     }
   }).then(function(user){
-    if (user.password == password){
+    if (user.password === password){
       req.session.password = password;
       req.session.userId = user.id;
-      console.log(req.session);
       res.redirect('/view');
     } else {
       res.redirect('/register');
@@ -107,16 +93,8 @@ router.get('/message', function(req, res){
 });
 
 //home Page
-router.get('/view', function(req, res){
-  res.render('view', {data: data})
-});
 
-// router.post('/view', function(req,res){
-//   let message = models.Message.create({
-//     body: req.boby.body = req.session.message
-//   })
-//   res.redirect('/view')
-// });
+
 
 
 //Likes
